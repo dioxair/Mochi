@@ -1,0 +1,58 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Mochi.ViewModels"
+             mc:Ignorable="d"
+             x:Class="Mochi.Views.FirstLaunchView"
+             x:DataType="vm:FirstLaunchViewModel">
+
+    <Design.DataContext>
+        <vm:FirstLaunchViewModel />
+    </Design.DataContext>
+
+    <Border Padding="40">
+        <StackPanel Spacing="20" VerticalAlignment="Center" HorizontalAlignment="Center" Width="350">
+            <TextBlock Text="Welcome to Mochi!"
+                       FontSize="28"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+
+            <TextBlock Text="Let's set up your virtual pet!"
+                       FontSize="14"
+                       Opacity="0.8"
+                       HorizontalAlignment="Center" />
+
+            <StackPanel Spacing="8" Margin="0,20,0,0">
+                <TextBlock Text="Pet Name" />
+                <TextBox Text="{Binding PetName}"
+                         Watermark="Enter your pet's name..."
+                         MaxLength="20" />
+                <TextBlock Text="{Binding ValidationError}"
+                           Foreground="Red"
+                           FontSize="12"
+                           IsVisible="{Binding ValidationError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock Text="Difficulty" />
+                <ComboBox ItemsSource="{Binding Difficulties}"
+                          SelectedItem="{Binding SelectedDifficulty}"
+                          HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock Text="Personality" />
+                <ComboBox ItemsSource="{Binding Personalities}"
+                          SelectedItem="{Binding SelectedPersonality}"
+                          HorizontalAlignment="Stretch" />
+            </StackPanel>
+
+            <Button Content="Start"
+                    Command="{Binding StartCommand}"
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Center"
+                    Margin="0,20,0,0" />
+        </StackPanel>
+    </Border>
+</UserControl>

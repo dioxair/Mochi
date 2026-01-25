@@ -1,0 +1,42 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Mochi.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Mochi.Views.MainView"
+             x:DataType="vm:MainViewModel">
+
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <Border Padding="30">
+        <StackPanel Spacing="20" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <TextBlock Text="{Binding PetName}"
+                       TextWrapping="Wrap"
+                       FontSize="32"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="8"
+                    Padding="20">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Configuration" FontWeight="SemiBold" FontSize="16" />
+                    <TextBlock Text="{Binding ConfigSummary}" TextWrapping="Wrap" Opacity="0.9" />
+                    <TextBlock Text="{Binding LastOpenedDisplay}" Opacity="0.7" FontSize="12" />
+                </StackPanel>
+            </Border>
+
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="8"
+                    Padding="20">
+                <StackPanel Spacing="12">
+                    <TextBlock Text="Pet Status" FontWeight="SemiBold" FontSize="16" />
+                    <TextBlock Text="{Binding PetStatusDisplay}" TextWrapping="Wrap" Opacity="0.9" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </Border>
+</UserControl>
