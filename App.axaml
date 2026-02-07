@@ -18,5 +18,34 @@
         <Style Selector="ComboBox">
             <Setter Property="Cursor" Value="Hand" />
         </Style>
+
+        <!-- Bottom Nav Button -->
+        <Style Selector="Button.navBtn">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="4,6" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Opacity" Value="0.5" />
+        </Style>
+        <Style Selector="Button.navBtn.active">
+            <Setter Property="Opacity" Value="1" />
+        </Style>
+        <Style Selector="Button.navBtn:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <!-- Care Action Cards -->
+        <Style Selector="Button.careBtn">
+            <Setter Property="Background" Value="{DynamicResource SystemControlBackgroundBaseLowBrush}" />
+            <Setter Property="CornerRadius" Value="16" />
+            <Setter Property="Padding" Value="12" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="MinHeight" Value="100" />
+        </Style>
     </Application.Styles>
 </Application>

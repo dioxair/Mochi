@@ -45,6 +45,6 @@ public partial class AppViewModel : ViewModelBase
         SaveData save = await _appState.LoadSaveOrCreateDefaultAsync();
         AppConfig config = _appState.CurrentConfig!;
 
-        CurrentViewModel = new MainViewModel(config, save);
+        CurrentViewModel = new MainViewModel(config, save, _appState);
     }
 }

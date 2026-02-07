@@ -11,32 +11,64 @@
         <vm:MainViewModel />
     </Design.DataContext>
 
-    <Border Padding="30">
-        <StackPanel Spacing="20" VerticalAlignment="Center" HorizontalAlignment="Center">
-            <TextBlock Text="{Binding PetName}"
-                       TextWrapping="Wrap"
-                       FontSize="32"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center" />
+    <DockPanel>
+        <!-- Bottom Navigation Bar -->
+        <Border DockPanel.Dock="Bottom"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="0,4,0,6">
+            <UniformGrid Columns="5">
 
-            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                    CornerRadius="8"
-                    Padding="20">
-                <StackPanel Spacing="12">
-                    <TextBlock Text="Configuration" FontWeight="SemiBold" FontSize="16" />
-                    <TextBlock Text="{Binding ConfigSummary}" TextWrapping="Wrap" Opacity="0.9" />
-                    <TextBlock Text="{Binding LastOpenedDisplay}" Opacity="0.7" FontSize="12" />
-                </StackPanel>
-            </Border>
+                <!-- emojis may or may not be sprite placeholders -->
+                <Button Command="{Binding NavigateHomeCommand}"
+                        Classes="navBtn"
+                        Classes.active="{Binding IsHomeSelected}">
+                    <StackPanel HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="🏠" FontSize="20" HorizontalAlignment="Center" />
+                        <TextBlock Text="Home" FontSize="10" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Button>
 
-            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
-                    CornerRadius="8"
-                    Padding="20">
-                <StackPanel Spacing="12">
-                    <TextBlock Text="Pet Status" FontWeight="SemiBold" FontSize="16" />
-                    <TextBlock Text="{Binding PetStatusDisplay}" TextWrapping="Wrap" Opacity="0.9" />
-                </StackPanel>
-            </Border>
-        </StackPanel>
-    </Border>
+                <Button Command="{Binding NavigateCareCommand}"
+                        Classes="navBtn"
+                        Classes.active="{Binding IsCareSelected}">
+                    <StackPanel HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="🍖" FontSize="20" HorizontalAlignment="Center" />
+                        <TextBlock Text="Care" FontSize="10" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding NavigateShopCommand}"
+                        Classes="navBtn"
+                        Classes.active="{Binding IsShopSelected}">
+                    <StackPanel HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="🛒" FontSize="20" HorizontalAlignment="Center" />
+                        <TextBlock Text="Shop" FontSize="10" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding NavigateReportCommand}"
+                        Classes="navBtn"
+                        Classes.active="{Binding IsReportSelected}">
+                    <StackPanel HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="📊" FontSize="20" HorizontalAlignment="Center" />
+                        <TextBlock Text="Report" FontSize="10" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding NavigateHelpCommand}"
+                        Classes="navBtn"
+                        Classes.active="{Binding IsHelpSelected}">
+                    <StackPanel HorizontalAlignment="Center" Spacing="2">
+                        <TextBlock Text="❓" FontSize="20" HorizontalAlignment="Center" />
+                        <TextBlock Text="Help" FontSize="10" HorizontalAlignment="Center" />
+                    </StackPanel>
+                </Button>
+
+            </UniformGrid>
+        </Border>
+
+        <!-- Page Content -->
+        <ContentControl Content="{Binding CurrentPage}" />
+    </DockPanel>
 </UserControl>

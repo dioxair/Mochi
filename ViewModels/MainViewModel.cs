@@ -1,31 +1,66 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Mochi.Domain;
+using Mochi.Services;
 
 namespace Mochi.ViewModels;
 
-public partial class MainViewModel(AppConfig config, SaveData save) : ViewModelBase
+/// <summary>
+/// Shell ViewModel that owns bottom-tab navigation and all child page ViewModels.
+/// </summary>
+public partial class MainViewModel : ViewModelBase
 {
-    [ObservableProperty] private DateTime _createdUtc = config.CreatedUtc;
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsHomeSelected))]
+    [NotifyPropertyChangedFor(nameof(IsCareSelected))]
+    [NotifyPropertyChangedFor(nameof(IsShopSelected))]
+    [NotifyPropertyChangedFor(nameof(IsReportSelected))]
+    [NotifyPropertyChangedFor(nameof(IsHelpSelected))]
+    private ViewModelBase _currentPage;
 
-    [ObservableProperty] private Difficulty _difficulty = config.Difficulty;
+    public HomeViewModel HomeVm { get; }
+    public CareViewModel CareVm { get; }
+    public ShopViewModel ShopVm { get; }
+    public ReportViewModel ReportVm { get; }
+    public HelpViewModel HelpVm { get; }
 
-    [ObservableProperty] private DateTime _lastOpenedUtc = save.LastOpenedUtc;
+    public bool IsHomeSelected => CurrentPage == HomeVm;
+    public bool IsCareSelected => CurrentPage == CareVm;
+    public bool IsShopSelected => CurrentPage == ShopVm;
+    public bool IsReportSelected => CurrentPage == ReportVm;
+    public bool IsHelpSelected => CurrentPage == HelpVm;
 
-    [ObservableProperty] private Personality _personality = config.Personality;
+    public MainViewModel(AppConfig config, SaveData save, AppStateService appState)
+    {
+        HomeVm = new HomeViewModel(config, save);
+        CareVm = new CareViewModel(config, save, appState);
+        ShopVm = new ShopViewModel();
+        ReportVm = new ReportViewModel(config, save);
+        HelpVm = new HelpViewModel();
 
-    [ObservableProperty] private string _petName = config.PetName;
+        _currentPage = HomeVm;
+    }
 
-    [ObservableProperty] private PetState _petState = save.Pet;
-
-    public MainViewModel() : this(new AppConfig { PetName = "Designer Pet" }, SaveData.CreateDefault())
+    /// <summary>Design-time constructor.</summary>
+    public MainViewModel() : this(
+        new AppConfig { PetName = "Designer" },
+        SaveData.CreateDefault(),
+        new AppStateService())
     {
     }
 
-    public string ConfigSummary => $"Pet: {PetName} | Difficulty: {Difficulty} | Personality: {Personality}";
+    [RelayCommand]
+    private void NavigateHome() => CurrentPage = HomeVm;
 
-    public string LastOpenedDisplay => $"Last opened: {LastOpenedUtc:g} UTC";
+    [RelayCommand]
+    private void NavigateCare() => CurrentPage = CareVm;
 
-    public string PetStatusDisplay =>
-        $"Hunger: {PetState.Hunger}/100 | Energy: {PetState.Energy}/100 | Happiness: {PetState.Happiness}/100 | Asleep: {PetState.IsAsleep}";
+    [RelayCommand]
+    private void NavigateShop() => CurrentPage = ShopVm;
+
+    [RelayCommand]
+    private void NavigateReport() => CurrentPage = ReportVm;
+
+    [RelayCommand]
+    private void NavigateHelp() => CurrentPage = HelpVm;
 }

@@ -1,0 +1,83 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:Mochi.ViewModels"
+             xmlns:domain="using:Mochi.Domain"
+             mc:Ignorable="d" d:DesignWidth="405" d:DesignHeight="620"
+             x:Class="Mochi.Views.ReportView"
+             x:DataType="vm:ReportViewModel">
+
+    <Design.DataContext>
+        <vm:ReportViewModel />
+    </Design.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Padding="20,24,20,8">
+        <StackPanel Spacing="16" HorizontalAlignment="Stretch">
+
+            <TextBlock Text="Activity Report"
+                       FontSize="24" FontWeight="Bold"
+                       HorizontalAlignment="Center" />
+
+            <!-- Config Summary Card -->
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="12"
+                    Padding="16"
+                    Margin="8,0">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Pet Info" FontWeight="SemiBold" FontSize="14" Opacity="0.7" />
+
+                    <DockPanel>
+                        <TextBlock Text="Name" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding PetName}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="Created" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding CreatedDate}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="Difficulty" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding Difficulty}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold" />
+                    </DockPanel>
+                    <DockPanel>
+                        <TextBlock Text="Personality" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding Personality}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold" />
+                    </DockPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- History Card -->
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="12"
+                    Padding="16"
+                    Margin="8,0">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="History" FontWeight="SemiBold" FontSize="14" Opacity="0.7" />
+
+                    <ItemsControl ItemsSource="{Binding History}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="domain:HistoryEntry">
+                                <Border Padding="0,6"
+                                        BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                                        BorderThickness="0,0,0,1">
+                                    <DockPanel>
+                                        <TextBlock Text="{Binding TimestampUtc, StringFormat={}{0:g}}"
+                                                   DockPanel.Dock="Right" HorizontalAlignment="Right"
+                                                   FontSize="11" Opacity="0.5" VerticalAlignment="Center" />
+                                        <TextBlock Text="{Binding Message}" FontSize="13"
+                                                   TextWrapping="Wrap" VerticalAlignment="Center" />
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>
