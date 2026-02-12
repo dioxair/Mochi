@@ -39,6 +39,15 @@ public partial class AppViewModel : ViewModelBase
         await NavigateToMainAsync();
     }
 
+    public async Task SaveOnShutdownAsync()
+    {
+        if (_appState.CurrentSave != null)
+        {
+            _appState.CurrentSave.LastOpenedUtc = DateTime.UtcNow;
+            await _appState.SaveSaveAsync(_appState.CurrentSave);
+        }
+    }
+
     private async Task NavigateToMainAsync()
     {
         // Load save (will create default if missing, and handle time-away)

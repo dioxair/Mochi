@@ -1,15 +1,14 @@
+using System.Linq;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
-using System.Linq;
 using Avalonia.Markup.Xaml;
 using Mochi.ViewModels;
 using Mochi.Views;
 
 namespace Mochi;
 
-public partial class App : Application
+public class App : Application
 {
     public override void Initialize()
     {
@@ -24,12 +23,14 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
 
-            AppViewModel appViewModel = new AppViewModel();
-            
+            AppViewModel appViewModel = new();
+
             desktop.MainWindow = new MainWindow
             {
-                DataContext = appViewModel,
+                DataContext = appViewModel
             };
+
+            desktop.ShutdownRequested += async (_, _) => { await appViewModel.SaveOnShutdownAsync(); };
 
             // Initialize the app (load config, decide which view to show)
             _ = appViewModel.InitializeAsync();
@@ -46,8 +47,6 @@ public partial class App : Application
 
         // remove each entry found
         foreach (DataAnnotationsValidationPlugin plugin in dataValidationPluginsToRemove)
-        {
             BindingPlugins.DataValidators.Remove(plugin);
-        }
     }
 }

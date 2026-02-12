@@ -32,6 +32,15 @@
                 </StackPanel>
             </Border>
 
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="12"
+                    Padding="8"
+                    Margin="12,0">
+                <TextBlock Text="{Binding SpeechBubbleText}"
+                           FontSize="14" FontWeight="SemiBold"
+                           HorizontalAlignment="Center"
+                           Margin="0,4" />
+            </Border>
 
             <!-- Mood -->
             <TextBlock Text="{Binding MoodDisplay}"

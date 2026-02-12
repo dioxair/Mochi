@@ -1,4 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using System;
+using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Mochi.Domain;
 using Mochi.Services;
@@ -6,10 +8,15 @@ using Mochi.Services;
 namespace Mochi.ViewModels;
 
 /// <summary>
-/// Shell ViewModel that owns bottom-tab navigation and all child page ViewModels.
+///     Shell ViewModel that owns bottom-tab navigation and all child page ViewModels.
 /// </summary>
 public partial class MainViewModel : ViewModelBase
 {
+    private readonly AppStateService _appState;
+    private readonly PetCareService _careService;
+    private readonly DispatcherTimer _decayTimer;
+    private readonly SaveData _save;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsHomeSelected))]
     [NotifyPropertyChangedFor(nameof(IsCareSelected))]
@@ -17,6 +24,38 @@ public partial class MainViewModel : ViewModelBase
     [NotifyPropertyChangedFor(nameof(IsReportSelected))]
     [NotifyPropertyChangedFor(nameof(IsHelpSelected))]
     private ViewModelBase _currentPage;
+
+    private int _tickCount;
+
+    public MainViewModel(AppConfig config, SaveData save, AppStateService appState)
+    {
+        _appState = appState;
+        _save = save;
+        _careService = new PetCareService(save.Pet, config);
+
+        HomeVm = new HomeViewModel(config, save);
+        CareVm = new CareViewModel(config, save, appState, _careService);
+        ShopVm = new ShopViewModel();
+        ReportVm = new ReportViewModel(config, save);
+        HelpVm = new HelpViewModel();
+
+        _currentPage = HomeVm;
+
+        _decayTimer = new DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(GameBalance.DecayTickIntervalSeconds)
+        };
+        _decayTimer.Tick += OnDecayTick;
+        _decayTimer.Start();
+    }
+
+    /// <summary>Design-time constructor.</summary>
+    public MainViewModel() : this(
+        new AppConfig { PetName = "Designer" },
+        SaveData.CreateDefault(),
+        new AppStateService())
+    {
+    }
 
     public HomeViewModel HomeVm { get; }
     public CareViewModel CareVm { get; }
@@ -30,37 +69,41 @@ public partial class MainViewModel : ViewModelBase
     public bool IsReportSelected => CurrentPage == ReportVm;
     public bool IsHelpSelected => CurrentPage == HelpVm;
 
-    public MainViewModel(AppConfig config, SaveData save, AppStateService appState)
+    private async void OnDecayTick(object? sender, EventArgs e)
     {
-        HomeVm = new HomeViewModel(config, save);
-        CareVm = new CareViewModel(config, save, appState);
-        ShopVm = new ShopViewModel();
-        ReportVm = new ReportViewModel(config, save);
-        HelpVm = new HelpViewModel();
+        _careService.ApplyDecay();
+        _tickCount++;
 
-        _currentPage = HomeVm;
-    }
-
-    /// <summary>Design-time constructor.</summary>
-    public MainViewModel() : this(
-        new AppConfig { PetName = "Designer" },
-        SaveData.CreateDefault(),
-        new AppStateService())
-    {
+        if (_tickCount % GameBalance.SaveEveryNTicks == 0) await _appState.SaveSaveAsync(_save);
     }
 
     [RelayCommand]
-    private void NavigateHome() => CurrentPage = HomeVm;
+    private void NavigateHome()
+    {
+        CurrentPage = HomeVm;
+    }
 
     [RelayCommand]
-    private void NavigateCare() => CurrentPage = CareVm;
+    private void NavigateCare()
+    {
+        CurrentPage = CareVm;
+    }
 
     [RelayCommand]
-    private void NavigateShop() => CurrentPage = ShopVm;
+    private void NavigateShop()
+    {
+        CurrentPage = ShopVm;
+    }
 
     [RelayCommand]
-    private void NavigateReport() => CurrentPage = ReportVm;
+    private void NavigateReport()
+    {
+        CurrentPage = ReportVm;
+    }
 
     [RelayCommand]
-    private void NavigateHelp() => CurrentPage = HelpVm;
+    private void NavigateHelp()
+    {
+        CurrentPage = HelpVm;
+    }
 }

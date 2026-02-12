@@ -20,9 +20,6 @@ public static class AppPaths
 
     public static void EnsureAppFolderExists()
     {
-        if (!Directory.Exists(LocalAppDataDir))
-        {
-            Directory.CreateDirectory(LocalAppDataDir);
-        }
+        if (!Directory.Exists(LocalAppDataDir)) Directory.CreateDirectory(LocalAppDataDir);
     }
 }

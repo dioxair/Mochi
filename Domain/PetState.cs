@@ -1,9 +1,11 @@
-﻿namespace Mochi.Domain;
+using CommunityToolkit.Mvvm.ComponentModel;
 
-public class PetState
+namespace Mochi.Domain;
+
+public partial class PetState : ObservableObject
 {
-    public int Hunger { get; set; } = 20;
-    public int Energy { get; set; } = 80;
-    public int Happiness { get; set; } = 70;
-    public bool IsAsleep { get; set; } = false;
+    [ObservableProperty] private int _energy = 80;
+    [ObservableProperty] private int _happiness = 70;
+    [ObservableProperty] private int _hunger = 20;
+    [ObservableProperty] private bool _isAsleep;
 }

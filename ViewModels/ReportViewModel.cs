@@ -4,26 +4,18 @@ using Mochi.Domain;
 
 namespace Mochi.ViewModels;
 
-public class ReportViewModel : ViewModelBase
+public class ReportViewModel(AppConfig config, SaveData save) : ViewModelBase
 {
-    public string PetName { get; }
-    public Difficulty Difficulty { get; }
-    public Personality Personality { get; }
-    public string CreatedDate { get; }
-    public IReadOnlyList<HistoryEntry> History { get; }
-
-    public ReportViewModel(AppConfig config, SaveData save)
-    {
-        PetName = config.PetName;
-        Difficulty = config.Difficulty;
-        Personality = config.Personality;
-        CreatedDate = config.CreatedUtc.ToLocalTime().ToString("MMMM d, yyyy");
-        // Show newest entries first
-        History = save.History.AsEnumerable().Reverse().ToList();
-    }
+    // Show newest entries first
 
     /// <summary>Design-time constructor.</summary>
     public ReportViewModel() : this(new AppConfig { PetName = "Designer" }, SaveData.CreateDefault())
     {
     }
+
+    public string PetName { get; } = config.PetName;
+    public Difficulty Difficulty { get; } = config.Difficulty;
+    public Personality Personality { get; } = config.Personality;
+    public string CreatedDate { get; } = config.CreatedUtc.ToLocalTime().ToString("MMMM d, yyyy");
+    public IReadOnlyList<HistoryEntry> History { get; } = save.History.AsEnumerable().Reverse().ToList();
 }

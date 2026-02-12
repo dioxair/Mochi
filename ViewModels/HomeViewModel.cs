@@ -1,30 +1,50 @@
+using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Mochi.Domain;
+using Mochi.Services;
 
 namespace Mochi.ViewModels;
 
-public partial class HomeViewModel(AppConfig config, SaveData save) : ViewModelBase
+public partial class HomeViewModel : ViewModelBase
 {
-    [ObservableProperty] private string _petName = config.PetName;
-
-    [ObservableProperty] private PetState _petState = save.Pet;
-
+    [ObservableProperty] private string _petName;
+    [ObservableProperty] private PetState _petState;
     [ObservableProperty] private string _speechBubbleText = "Hi there :D I'm so happy to see you!";
+
+    public HomeViewModel(AppConfig config, SaveData save)
+    {
+        _petName = config.PetName;
+        _petState = save.Pet;
+
+        _petState.PropertyChanged += OnPetStatChanged;
+        UpdateSpeechBubble();
+    }
 
     /// <summary>Design-time constructor.</summary>
     public HomeViewModel() : this(new AppConfig { PetName = "Designer Pet" }, SaveData.CreateDefault())
     {
     }
 
-    public string MoodDisplay => DeriveMood();
+    public string MoodDisplay => PetCareService.CalculateMood(PetState).ToString();
 
-    private string DeriveMood()
+    private void OnPetStatChanged(object? sender, PropertyChangedEventArgs e)
     {
-        // Interpret hunger inversely (lower hunger = better) when averaging wellness.
-        double avg = (PetState.Energy + PetState.Happiness + (100 - PetState.Hunger)) / 3.0;
-        if (PetState.IsAsleep) return "Sleeping";
-        if (avg >= 70) return "Happy";
-        if (avg >= 40) return "Okay";
-        return "Sad";
+        OnPropertyChanged(nameof(MoodDisplay));
+        UpdateSpeechBubble();
+    }
+
+    private void UpdateSpeechBubble()
+    {
+        Mood mood = PetCareService.CalculateMood(PetState);
+        SpeechBubbleText = mood switch
+        {
+            Mood.Ecstatic => "I'm having the best day ever!! :D",
+            Mood.Happy => "Life is good! Thanks for taking care of me :)",
+            Mood.Content => "I'm doing alright.",
+            Mood.Sad => "I could use some attention... :(",
+            Mood.Miserable => "Please help me... I don't feel good.",
+            Mood.Sleeping => "Zzz...",
+            _ => "..."
+        };
     }
 }

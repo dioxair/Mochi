@@ -23,7 +23,7 @@
                 <StackPanel Spacing="8">
                     <TextBlock Text="Welcome to Mochi!" FontWeight="SemiBold" FontSize="16" />
                     <TextBlock TextWrapping="Wrap" FontSize="13" LineHeight="20">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel suscipit urna, sed ultrices risus. Vivamus pharetra vehicula fringilla. Cras dapibus erat ut leo ultrices, sit amet lobortis lectus feugiat. Nunc eu eros vitae lacus tempor imperdiet a a mi. Donec vel massa diam. Mauris ac nisi sit amet tortor auctor faucibus at sed dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam eget sem id nisi dictum egestas at ac nunc. Nulla aliquam orci non dui fringilla pulvinar. 
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean vel suscipit urna, sed ultrices risus. Vivamus pharetra vehicula fringilla. Cras dapibus erat ut leo ultrices, sit amet lobortis lectus feugiat. Nunc eu eros vitae lacus tempor imperdiet a a mi. Donec vel massa diam. Mauris ac nisi sit amet tortor auctor faucibus at sed dolor. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aliquam eget sem id nisi dictum egestas at ac nunc. Nulla aliquam orci non dui fringilla pulvinar.
                     </TextBlock>
                 </StackPanel>
             </Border>

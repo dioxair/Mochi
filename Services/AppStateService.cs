@@ -45,6 +45,9 @@ public class AppStateService
             {
                 string awayMessage = FormatTimeAway(away);
                 save.History.Add(new HistoryEntry($"Returned after {awayMessage}"));
+
+                // Apply stat decay for time away
+                if (CurrentConfig != null) PetCareService.ApplyTimeAwayDecay(save.Pet, CurrentConfig, away);
             }
 
             // Update last opened time

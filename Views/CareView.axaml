@@ -17,34 +17,50 @@
                    FontSize="24" FontWeight="Bold"
                    HorizontalAlignment="Center" />
 
-        <!-- Action Grid (2 × 2) -->
-        <!-- Emojis are sprite placeholders, sprites should be esnupi in the states -->
+        <!-- Action Grid (2 x 2) -->
         <UniformGrid Columns="2" Rows="2" Margin="8,8">
             <Button Command="{Binding FeedCommand}" Classes="careBtn" Margin="6">
                 <StackPanel Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="🍗" FontSize="36" HorizontalAlignment="Center" />
+                    <TextBlock Text="&#x1F357;" FontSize="36" HorizontalAlignment="Center" />
                     <TextBlock Text="Feed" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding FeedCooldownText}"
+                               FontSize="11" Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding FeedCooldownText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
             </Button>
 
             <Button Command="{Binding PlayCommand}" Classes="careBtn" Margin="6">
                 <StackPanel Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="🎾" FontSize="36" HorizontalAlignment="Center" />
+                    <TextBlock Text="&#x1F3BE;" FontSize="36" HorizontalAlignment="Center" />
                     <TextBlock Text="Play" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding PlayCooldownText}"
+                               FontSize="11" Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding PlayCooldownText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
             </Button>
 
             <Button Command="{Binding SleepCommand}" Classes="careBtn" Margin="6">
                 <StackPanel Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="💤" FontSize="36" HorizontalAlignment="Center" />
-                    <TextBlock Text="Sleep" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                    <TextBlock Text="&#x1F4A4;" FontSize="36" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding SleepButtonLabel}" FontSize="14" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding SleepCooldownText}"
+                               FontSize="11" Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding SleepCooldownText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
             </Button>
 
             <Button Command="{Binding CleanCommand}" Classes="careBtn" Margin="6">
                 <StackPanel Spacing="6" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <TextBlock Text="🛁" FontSize="36" HorizontalAlignment="Center" />
+                    <TextBlock Text="&#x1F6C1;" FontSize="36" HorizontalAlignment="Center" />
                     <TextBlock Text="Clean" FontSize="14" FontWeight="SemiBold" HorizontalAlignment="Center" />
+                    <TextBlock Text="{Binding CleanCooldownText}"
+                               FontSize="11" Foreground="Gray"
+                               HorizontalAlignment="Center"
+                               IsVisible="{Binding CleanCooldownText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
                 </StackPanel>
             </Button>
         </UniformGrid>
