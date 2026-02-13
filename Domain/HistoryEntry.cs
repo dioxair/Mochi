@@ -14,6 +14,7 @@ public class HistoryEntry
         Message = message;
     }
 
-    public DateTime TimestampUtc { get; set; }
+    private DateTime TimestampUtc { get; }
     public string Message { get; set; } = string.Empty;
+    public DateTime TimestampLocal => TimestampUtc.ToLocalTime();
 }

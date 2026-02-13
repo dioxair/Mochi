@@ -65,7 +65,7 @@
                                         BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
                                         BorderThickness="0,0,0,1">
                                     <DockPanel>
-                                        <TextBlock Text="{Binding TimestampUtc, StringFormat={}{0:g}}"
+                                        <TextBlock Text="{Binding TimestampLocal, StringFormat={}{0:g}}"
                                                    DockPanel.Dock="Right" HorizontalAlignment="Right"
                                                    FontSize="11" Opacity="0.5" VerticalAlignment="Center" />
                                         <TextBlock Text="{Binding Message}" FontSize="13"
