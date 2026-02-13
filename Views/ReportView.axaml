@@ -50,6 +50,54 @@
                 </StackPanel>
             </Border>
 
+            <!-- Spending Summary Card -->
+            <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
+                    CornerRadius="12"
+                    Padding="16"
+                    Margin="8,0">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="Spending Summary" FontWeight="SemiBold" FontSize="14" Opacity="0.7" />
+
+                    <DockPanel>
+                        <TextBlock Text="Total Earned" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding TotalEarned, StringFormat='${0}'}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="#4CAF50" />
+                    </DockPanel>
+
+                    <DockPanel>
+                        <TextBlock Text="Total Spent" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding TotalSpent, StringFormat='${0}'}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold"
+                                   Foreground="#F44336" />
+                    </DockPanel>
+
+                    <DockPanel>
+                        <TextBlock Text="Current Balance" DockPanel.Dock="Left" FontSize="13" />
+                        <TextBlock Text="{Binding CurrentBalance, StringFormat='${0}'}" DockPanel.Dock="Right"
+                                   HorizontalAlignment="Right" FontSize="13" FontWeight="SemiBold" />
+                    </DockPanel>
+
+                    <!-- Per-category breakdown -->
+                    <StackPanel Spacing="4"
+                                IsVisible="{Binding HasPurchases}"
+                                Margin="0,8,0,0">
+                        <TextBlock Text="By Category" FontSize="12" Opacity="0.5" />
+                        <ItemsControl ItemsSource="{Binding SpendingByCategory}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="domain:CategorySummary">
+                                    <DockPanel Margin="0,2">
+                                        <TextBlock Text="{Binding Category}" DockPanel.Dock="Left" FontSize="13" />
+                                        <TextBlock Text="{Binding Total, StringFormat='${0}'}" DockPanel.Dock="Right"
+                                                   HorizontalAlignment="Right" FontSize="13" Opacity="0.7" />
+                                    </DockPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
             <!-- History Card -->
             <Border Background="{DynamicResource SystemControlBackgroundBaseLowBrush}"
                     CornerRadius="12"

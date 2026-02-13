@@ -35,7 +35,7 @@ public partial class MainViewModel : ViewModelBase
 
         HomeVm = new HomeViewModel(config, save);
         CareVm = new CareViewModel(config, save, appState, _careService);
-        ShopVm = new ShopViewModel();
+        ShopVm = new ShopViewModel(save, appState);
         ReportVm = new ReportViewModel(config, save);
         HelpVm = new HelpViewModel();
 
@@ -71,7 +71,7 @@ public partial class MainViewModel : ViewModelBase
 
     private async void OnDecayTick(object? sender, EventArgs e)
     {
-        _careService.ApplyDecay();
+        _careService.ApplyDecay(_save.ActiveBuffs);
         _tickCount++;
 
         if (_tickCount % GameBalance.SaveEveryNTicks == 0) await _appState.SaveSaveAsync(_save);
@@ -92,12 +92,14 @@ public partial class MainViewModel : ViewModelBase
     [RelayCommand]
     private void NavigateShop()
     {
+        ShopVm.RefreshBalance();
         CurrentPage = ShopVm;
     }
 
     [RelayCommand]
     private void NavigateReport()
     {
+        ReportVm.Refresh();
         CurrentPage = ReportVm;
     }
 

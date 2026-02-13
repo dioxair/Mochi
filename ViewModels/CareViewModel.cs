@@ -103,48 +103,38 @@ public partial class CareViewModel : ViewModelBase
     [RelayCommand(CanExecute = nameof(CanFeed))]
     private async Task Feed()
     {
-        string? msg = _careService.PerformAction(CareAction.Feed, PetName);
-        if (msg != null)
-        {
-            LastActionMessage = msg;
-            _save.History.Add(new HistoryEntry(msg));
-            await _appState.SaveSaveAsync(_save);
-        }
+        await PerformCareAsync(CareAction.Feed);
     }
 
     [RelayCommand(CanExecute = nameof(CanPlay))]
     private async Task Play()
     {
-        string? msg = _careService.PerformAction(CareAction.Play, PetName);
-        if (msg != null)
-        {
-            LastActionMessage = msg;
-            _save.History.Add(new HistoryEntry(msg));
-            await _appState.SaveSaveAsync(_save);
-        }
+        await PerformCareAsync(CareAction.Play);
     }
 
     [RelayCommand(CanExecute = nameof(CanSleep))]
     private async Task Sleep()
     {
-        string? msg = _careService.PerformAction(CareAction.Sleep, PetName);
-        if (msg != null)
-        {
-            LastActionMessage = msg;
-            _save.History.Add(new HistoryEntry(msg));
-            await _appState.SaveSaveAsync(_save);
-        }
+        await PerformCareAsync(CareAction.Sleep);
     }
 
     [RelayCommand(CanExecute = nameof(CanClean))]
     private async Task Clean()
     {
-        string? msg = _careService.PerformAction(CareAction.Clean, PetName);
-        if (msg != null)
-        {
-            LastActionMessage = msg;
-            _save.History.Add(new HistoryEntry(msg));
-            await _appState.SaveSaveAsync(_save);
-        }
+        await PerformCareAsync(CareAction.Clean);
+    }
+
+    private async Task PerformCareAsync(CareAction action)
+    {
+        string? msg = _careService.PerformAction(action, PetName);
+        if (msg == null) return;
+
+        int reward = GameBalance.CareActionRewards[action];
+        _save.WalletBalance += reward;
+        _save.Transactions.Add(new Transaction(reward, false, "CareReward", msg));
+
+        LastActionMessage = $"{msg} (+{reward} coins)";
+        _save.History.Add(new HistoryEntry(msg));
+        await _appState.SaveSaveAsync(_save);
     }
 }

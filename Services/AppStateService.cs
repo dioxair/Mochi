@@ -48,6 +48,21 @@ public class AppStateService
 
                 // Apply stat decay for time away
                 if (CurrentConfig != null) PetCareService.ApplyTimeAwayDecay(save.Pet, CurrentConfig, away);
+
+                // Return bonus coins
+                int bonus = Math.Min(
+                    (int)(away.TotalMinutes / GameBalance.ReturnBonusIntervalMinutes)
+                    * GameBalance.ReturnBonusCoinsPerInterval,
+                    GameBalance.ReturnBonusMaxCoins);
+
+                if (bonus > 0)
+                {
+                    save.WalletBalance += bonus;
+                    save.Transactions.Add(new Transaction(
+                        bonus, false, "ReturnBonus",
+                        $"Welcome back bonus ({awayMessage} away)"));
+                    save.History.Add(new HistoryEntry($"Earned {bonus} coins for returning"));
+                }
             }
 
             // Update last opened time

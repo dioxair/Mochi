@@ -94,8 +94,20 @@ public class PetCareService(PetState pet, AppConfig config)
     /// <summary>
     ///     Called every tick by the background decay timer.
     /// </summary>
-    public void ApplyDecay()
+    public void ApplyDecay(List<ActiveBuff> activeBuffs)
     {
+        // Remove expired buffs
+        activeBuffs.RemoveAll(b => b.ExpiresUtc <= DateTime.UtcNow);
+
+        // Compute combined buff multipliers
+        double buffHunger = 1.0, buffEnergy = 1.0, buffHappiness = 1.0;
+        foreach (ActiveBuff buff in activeBuffs)
+        {
+            buffHunger *= buff.HungerDecayMult;
+            buffEnergy *= buff.EnergyDecayMult;
+            buffHappiness *= buff.HappinessDecayMult;
+        }
+
         double diffDecay = GameBalance.DifficultySettings[config.Difficulty].DecayMult;
         (double Hunger, double Energy, double Happiness) persDecay =
             GameBalance.PersonalityDecayMods[config.Personality];
@@ -106,8 +118,8 @@ public class PetCareService(PetState pet, AppConfig config)
                                     (int)Math.Round(GameBalance.SleepEnergyRecoveryPerTick * diffDecay *
                                                     persDecay.Energy), 0, 100);
             pet.Hunger = Math.Clamp(pet.Hunger +
-                                    (int)Math.Round(GameBalance.SleepHungerPerTick * diffDecay * persDecay.Hunger), 0,
-                100);
+                                    (int)Math.Round(GameBalance.SleepHungerPerTick * diffDecay * persDecay.Hunger *
+                                                    buffHunger), 0, 100);
 
             // Auto-wake when energy is full
             if (pet.Energy >= 100)
@@ -116,14 +128,14 @@ public class PetCareService(PetState pet, AppConfig config)
         else
         {
             pet.Hunger = Math.Clamp(pet.Hunger +
-                                    (int)Math.Round(GameBalance.BaseHungerDecayPerTick * diffDecay * persDecay.Hunger),
-                0, 100);
+                                    (int)Math.Round(GameBalance.BaseHungerDecayPerTick * diffDecay * persDecay.Hunger *
+                                                    buffHunger), 0, 100);
             pet.Energy = Math.Clamp(pet.Energy +
-                                    (int)Math.Round(GameBalance.BaseEnergyDecayPerTick * diffDecay * persDecay.Energy),
-                0, 100);
+                                    (int)Math.Round(GameBalance.BaseEnergyDecayPerTick * diffDecay * persDecay.Energy *
+                                                    buffEnergy), 0, 100);
             pet.Happiness = Math.Clamp(pet.Happiness +
                                        (int)Math.Round(GameBalance.BaseHappinessDecayPerTick * diffDecay *
-                                                       persDecay.Happiness), 0, 100);
+                                                       persDecay.Happiness * buffHappiness), 0, 100);
         }
     }
 
@@ -162,10 +174,13 @@ public class PetCareService(PetState pet, AppConfig config)
 
         double wellness = (pet.Energy + pet.Happiness + (100 - pet.Hunger)) / 3.0;
 
-        if (wellness >= GameBalance.MoodEcstaticThreshold) return Mood.Ecstatic;
-        if (wellness >= GameBalance.MoodHappyThreshold) return Mood.Happy;
-        if (wellness >= GameBalance.MoodContentThreshold) return Mood.Content;
-        if (wellness >= GameBalance.MoodSadThreshold) return Mood.Sad;
-        return Mood.Miserable;
+        return wellness switch
+        {
+            >= GameBalance.MoodEcstaticThreshold => Mood.Ecstatic,
+            >= GameBalance.MoodHappyThreshold => Mood.Happy,
+            >= GameBalance.MoodContentThreshold => Mood.Content,
+            >= GameBalance.MoodSadThreshold => Mood.Sad,
+            _ => Mood.Miserable
+        };
     }
 }

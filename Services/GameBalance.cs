@@ -31,6 +31,11 @@ public static class GameBalance
 
     public const double MoodSadThreshold = 20.0;
 
+    // economy: return bonus
+    public const int ReturnBonusCoinsPerInterval = 1;
+    public const int ReturnBonusIntervalMinutes = 5;
+    public const int ReturnBonusMaxCoins = 50;
+
     // care action base effects
     // (HungerDelta, EnergyDelta, HappinessDelta)
     // Negative hunger = less hungry (good). Positive energy = more energy (good).
@@ -84,4 +89,22 @@ public static class GameBalance
             [Personality.Anxious] = (1.0, 1.0, 1.25),
             [Personality.Independent] = (0.85, 0.85, 0.85)
         };
+
+    // economy: coins earned per care action
+    public static readonly Dictionary<CareAction, int> CareActionRewards = new()
+    {
+        [CareAction.Feed] = 5,
+        [CareAction.Play] = 8,
+        [CareAction.Sleep] = 3,
+        [CareAction.Clean] = 5
+    };
+
+    // economy: shop items (temporary decay modifier buffs)
+    public static readonly IReadOnlyList<ShopItemDefinition> ShopItems =
+    [
+        new("Premium Food", 10, "Food", 2, 0.5, 1.0, 1.0),
+        new("Toy", 15, "Toys", 2, 1.0, 1.0, 0.5),
+        new("Comfy Bed", 25, "Comfort", 3, 1.0, 0.5, 1.0),
+        new("Medicine", 20, "Health", 1, 0.7, 0.7, 0.7)
+    ];
 }
